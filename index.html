@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boutik Lakay</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fff;--card:#fff;--ink:#26272B;--mute:#7A7C82;--line:#EBEBEB;--brand:#2E3036;--brand-ink:#fff;--hot:#D0213A;--shot:#F5F5F5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 "Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:90px}
+header{padding:20px 16px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em}
+header p{margin:2px 0 0;color:var(--mute);font-size:14px}
+#msg{margin:0 16px;color:var(--hot);font-size:14px}
+.bar{position:sticky;top:0;background:var(--bg);padding:8px 16px 10px;z-index:5}
+input,textarea,select{font:inherit;color:var(--ink)}
+input[type=search]{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card)}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:2px}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tabs .chip{flex:1;font-weight:600}
+.chip{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:6px 16px}
+@media(min-width:640px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 20px rgba(0,0,0,.05);overflow:hidden;display:flex;flex-direction:column}
+.shot{background:var(--shot);aspect-ratio:1/1;display:grid;place-items:center;color:var(--mute)}
+.shot svg{width:44%;height:auto}
+.shot img{width:100%;height:100%;object-fit:cover}
+.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px;flex:1}
+.cat{color:var(--mute);font-size:12px}
+.name{font-weight:600;font-size:15px}
+.price{font-weight:800;font-size:17px;margin:4px 0 8px}
+.stars{display:flex;align-items:center;gap:2px;margin:-4px 0 8px;font-size:12px;color:var(--mute);flex-wrap:wrap}
+.stars button{border:0;background:none;padding:2px;font-size:22px;line-height:1;cursor:pointer;color:var(--line)}
+.stars button.on,.stars .on{color:var(--ink)}
+.stars span.s{font-size:16px;color:var(--line)}
+.stars em{font-style:normal;margin-left:4px}
+.add{margin-top:auto;border:0;background:var(--brand);color:var(--brand-ink);padding:11px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.empty{padding:32px 16px;text-align:center;color:var(--mute)}
+.fab{position:fixed;left:12px;right:12px;bottom:12px;z-index:20;display:flex;justify-content:space-between;align-items:center;border:0;background:var(--ink);color:var(--bg);padding:15px 18px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.2);font:inherit;font-weight:600;cursor:pointer}
+.fab b{font-weight:800}
+.sheet{position:fixed;inset:0;z-index:30;display:none;background:rgba(0,0,0,.5);align-items:flex-end}
+.sheet.open{display:flex}
+.panel{background:var(--card);width:100%;max-height:90%;overflow:auto;border-radius:18px 18px 0 0;padding:16px}
+.panel h2,.svc h2{margin:0 0 8px;font-size:20px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row .t{flex:1}
+.row .t small{display:block;color:var(--mute)}
+.row img{width:44px;height:44px;object-fit:cover;border-radius:8px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:18px;cursor:pointer}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding:14px 0 6px}
+.close,.clear{width:100%;margin-top:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:12px;border-radius:12px;font:inherit;cursor:pointer}
+.clear{border-color:var(--hot);color:var(--hot);background:transparent}
+.note{color:var(--mute);font-size:12px;padding:8px 16px 0}
+.f{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.f label{font-size:13px;color:var(--mute)}
+.f input,.f textarea,.f select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg)}
+.err{color:var(--hot);font-size:14px;min-height:20px;margin:4px 0 0}
+.send{display:block;text-align:center;text-decoration:none;width:100%;margin-top:6px;border:0;background:var(--brand);color:var(--brand-ink);padding:14px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer}
+.fb{font-size:14px;margin:8px 0 0;color:var(--mute)}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:6px 16px 12px}
+.svc p{margin:4px 0 10px;color:var(--mute);font-size:14px}
+.svc img.ph{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+.sel{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg)}
+</style>
+</head>
+<body>
+<header>
+<div><h1>Boutik Lakay</h1><p>Telefòn ak akseswa pou tout moun</p></div>
+<div id="acct"></div>
+</header>
+<p id="msg"></p>
+<div class="bar">
+<div class="tabs" id="tabs"></div>
+<input id="q" type="search" placeholder="Chèche yon telefòn…" aria-label="Chèche yon pwodwi">
+<div class="chips" id="chips"></div>
+</div>
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" hidden>Pa gen pwodwi pou kounye a.</div>
+<div id="svcs" style="display:none"></div>
+<div id="loan" class="svc" style="display:none">
+<h2>Demann prè</h2>
+<p>Ranpli fòm nan. N ap egzamine demann ou epi reponn ou sou WhatsApp.</p>
+<div class="f">
+<div><label for="ln">Non ou</label><input id="ln" autocomplete="name"></div>
+<div><label for="lp">Telefòn</label><input id="lp" type="tel" inputmode="tel" autocomplete="tel"></div>
+<div><label for="la">Kote ou rete</label><input id="la" autocomplete="street-address"></div>
+<div><label for="lm">Montan ou vle (G)</label><input id="lm" type="number" inputmode="numeric" min="1"></div>
+<div><label for="lr">Rezon prè a</label><input id="lr"></div>
+<div><label for="lg">Garanti</label><select id="lg"><option>Telefòn</option><option>Machin</option><option>Lòt garanti</option><option>San garanti</option></select></div>
+<div><label for="ld">Ranbousman sou</label><select id="ld"><option value="1">1 mwa</option><option value="3">3 mwa</option><option value="6">6 mwa</option><option value="12">12 mwa</option></select></div>
+</div>
+<p class="err" id="lerr" role="alert"></p>
+<a class="send" id="lsend" href="#" target="_blank" rel="noopener">Voye demann lan sou WhatsApp</a>
+</div>
+<div id="adm" style="display:none"></div>
+<p class="note">Non ak pri yo sou paj sa a se sa Admin lan mete. Ou ka bay yon nòt (etwal) sou yon pwodwi apre ou fin kòmande l.</p>
+
+<button class="fab" id="fab" aria-label="Louvri panyen"><span id="count">Panyen vid</span><b id="sum">0 G</b></button>
+<div class="sheet" id="sheet">
+<div class="panel" role="dialog" aria-label="Panyen">
+<h2>Panyen ou</h2>
+<div id="lines"></div>
+<div class="total"><span>Total</span><span id="tot">0 G</span></div>
+<div id="order" hidden>
+<div class="f">
+<div><label for="nm">Non ou</label><input id="nm" autocomplete="name"></div>
+<div><label for="ph">Nimewo WhatsApp ou</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel" placeholder="Egz: 509 3xxx xxxx"></div>
+<div><label for="ad">Adrès livrezon</label><input id="ad" autocomplete="street-address"></div>
+<div><label for="nt">Nòt pou livrezon (opsyonèl)</label><textarea id="nt" rows="2"></textarea></div>
+</div>
+<p class="err" id="err" role="alert"></p>
+<a class="send" id="send" href="#" target="_blank" rel="noopener">Voye kòmand lan sou WhatsApp</a>
+<button class="clear" id="clear">Vide panyen an</button>
+</div>
+<button class="close" id="close">Kontinye achte</button>
+</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,addDoc,deleteDoc,updateDoc,onSnapshot,query,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const cfg={apiKey:"AIzaSyASrLAC13CFHtuD-lf3b62q5M58DObk1qI",authDomain:"boutik-lakay.firebaseapp.com",projectId:"boutik-lakay",storageBucket:"boutik-lakay.firebasestorage.app",messagingSenderId:"976551276885",appId:"1:976551276885:web:73e08edac118088be63fdc"};
+const ADMIN="princeofhati@gmail.com",SHOP_WA="50943586274";
+const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
+const $=i=>document.getElementById(i);
+const G=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" G";
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
+const PH='<svg viewBox="0 0 40 70" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="4" y="2" width="32" height="66" rx="7"/><circle cx="20" cy="60" r="2"/></svg>';
+const OST=["An atant","Konfime","An livrezon","Livre","Anile"],LST=["An atant","Apwouve","Refize"];
+let P=[],S=[],R=[],O=[],L=[],user=null,cat="Tout",tab="p",sec="p",ed=null,cur="",arm="",cart={},lastO="",lastL="",unsubs=[];
+try{cart=JSON.parse(localStorage.getItem("bl-cart"))||{}}catch(e){}
+const saveCart=()=>{try{localStorage.setItem("bl-cart",JSON.stringify(cart))}catch(e){}};
+const isAdmin=()=>!!user&&user.email===ADMIN;
+const msg=t=>{$("msg").textContent=t||""};
+const dt=x=>x.ts&&x.ts.seconds?new Date(x.ts.seconds*1000).toLocaleDateString("fr-FR"):"";
+
+function sub(q,fn){return onSnapshot(q,s=>fn(s.docs.map(d=>({id:d.id,...d.data()}))),e=>{console.error(e);msg(e.code==="permission-denied"?"Pa gen aksè: règ Firestore yo poko pibliye.":"Pwoblèm koneksyon ak baz done a.")})}
+const asc=(a,b)=>((a.ts&&a.ts.seconds)||9e9)-((b.ts&&b.ts.seconds)||9e9);
+const desc=(a,b)=>asc(b,a);
+sub(collection(db,"products"),a=>{P=a.sort(asc);chips();grid();cartUI();admRender()});
+sub(collection(db,"services"),a=>{S=a.sort(asc);svcs();admRender()});
+sub(collection(db,"ratings"),a=>{R=a;grid()});
+
+onAuthStateChanged(auth,u=>{
+ user=u;unsubs.forEach(f=>f());unsubs=[];O=[];L=[];msg("");
+ if(u){
+  const a=isAdmin();
+  unsubs.push(sub(a?collection(db,"orders"):query(collection(db,"orders"),where("uid","==",u.uid)),x=>{O=x.sort(desc);grid();admRender()}));
+  unsubs.push(sub(a?collection(db,"loans"):query(collection(db,"loans"),where("uid","==",u.uid)),x=>{L=x.sort(desc);admRender()}));
+  if(!$("nm").value)$("nm").value=u.displayName||"";
+  if(!$("ln").value)$("ln").value=u.displayName||"";
+ }
+ if(tab==="a"&&!isAdmin())tab="p";
+ acct();tabsUI();view();grid();cartUI();admRender();
+});
+
+function acct(){
+ $("acct").innerHTML=user?`<button class="chip" id="out">${esc((user.displayName||"Kont mwen").split(" ")[0])} · Soti</button>`:`<button class="chip" id="in">Konekte ak Google</button>`;
+}
+async function login(){
+ try{await signInWithPopup(auth,new GoogleAuthProvider())}
+ catch(e){
+  msg(e.code==="auth/unauthorized-domain"?"Domèn sit sa a poko otorize nan Firebase (Authentication → Settings → Authorized domains).":e.code==="auth/popup-blocked"?"Chrome bloke fenèt la. Pèmèt popup pou sit sa a epi eseye ankò.":e.code==="auth/popup-closed-by-user"?"":"Koneksyon an echwe: "+e.code);
+ }
+}
+
+function tabsUI(){
+ const T=[["p","Pwodwi"],["s","Sèvis"],["l","Prè"]];
+ if(isAdmin())T.push(["a","Admin"]);
+ $("tabs").innerHTML=T.map(x=>`<button class="chip" data-t="${x[0]}" aria-pressed="${tab===x[0]}">${x[1]}</button>`).join("");
+}
+function view(){
+ const p=tab==="p";
+ $("q").style.display=p?"":"none";$("chips").style.display=p?"":"none";$("grid").style.display=p?"":"none";
+ $("svcs").style.display=tab==="s"?"block":"none";$("loan").style.display=tab==="l"?"block":"none";$("adm").style.display=tab==="a"?"block":"none";
+ if(!p)$("empty").hidden=true;
+}
+
+function chips(){
+ const cs=["Tout"].concat(P.map(x=>x.c).filter((v,i,a)=>a.indexOf(v)===i));
+ if(cs.indexOf(cat)<0)cat="Tout";
+ $("chips").innerHTML=cs.map(c=>`<button class="chip" data-c="${esc(c)}" aria-pressed="${c===cat}">${esc(c)}</button>`).join("");
+}
+function bought(pid){return !!user&&O.some(o=>o.uid===user.uid&&(o.items||[]).some(i=>i.id===pid))}
+function stars(pid){
+ const rs=R.filter(r=>r.pid===pid),n=rs.length,avg=n?rs.reduce((a,r)=>a+r.stars,0)/n:0;
+ const mine=user?R.find(r=>r.id===user.uid+"_"+pid):null,can=bought(pid);
+ const sc=can?(mine?mine.stars:0):Math.round(avg);
+ let h='<div class="stars">';
+ for(let i=1;i<=5;i++)h+=can?`<button data-r="${pid}:${i}" class="${sc>=i?"on":""}" aria-label="${i} etwal">★</button>`:`<span class="s${sc>=i?" on":""}">★</span>`;
+ return h+`<em>${n?avg.toFixed(1)+" ("+n+")":"Pa gen nòt"}${can&&!mine?" · Bay nòt ou":""}</em></div>`;
+}
+function grid(){
+ const q=$("q").value.trim().toLowerCase();
+ const l=P.filter(x=>(cat==="Tout"||x.c===cat)&&String(x.n).toLowerCase().indexOf(q)>-1);
+ $("grid").innerHTML=l.map(x=>`<div class="card"><div class="shot">${x.img?`<img src="${x.img}" alt="${esc(x.n)}">`:PH}</div><div class="info"><span class="cat">${esc(x.c)}</span><span class="name">${esc(x.n)}</span><span class="price">${G(x.p)}</span>${stars(x.id)}<button class="add" data-a="${x.id}">Ajoute nan panyen</button></div></div>`).join("");
+ $("empty").hidden=l.length>0||tab!=="p";
+}
+function svcs(){
+ $("svcs").innerHTML=S.map(x=>{
+  const u="https://wa.me/"+SHOP_WA+"?text="+encodeURIComponent("Bonjou Boutik Lakay! Mwen vle mande sèvis sa a: "+x.n);
+  return `<div class="svc">${x.img?`<img class="ph" src="${x.img}" alt="">`:""}<span class="cat">${esc(x.c)}</span><div class="name">${esc(x.n)}</div><p>${esc(x.d)}</p><a class="send" href="${u}" target="_blank" rel="noopener">Mande sèvis la sou WhatsApp</a></div>`}).join("")||'<p class="empty">Pa gen sèvis pou kounye a.</p>';
+}
+
+function cartUI(){
+ let n=0,t=0,h="";
+ Object.keys(cart).forEach(id=>{const x=P.find(p=>p.id===id);if(!x)return;const k=cart[id];n+=k;t+=k*x.p;
+  h+=`<div class="row"><div class="t">${esc(x.n)}<small>${G(x.p)}</small></div><div class="qty"><button data-m="${id}" aria-label="Mwens">−</button><span>${k}</span><button data-p="${id}" aria-label="Plis">+</button></div></div>`});
+ $("lines").innerHTML=h||'<p class="empty">Panyen ou vid. Ajoute yon pwodwi pou kòmanse.</p>';
+ $("count").textContent=n?"Panyen · "+n+" atik":"Panyen vid";
+ $("sum").textContent=G(t);$("tot").textContent=G(t);$("order").hidden=!n;
+}
+function orderData(){
+ const nm=$("nm").value.trim(),ph=$("ph").value.trim(),ad=$("ad").value.trim(),nt=$("nt").value.trim();
+ const items=Object.keys(cart).map(id=>{const x=P.find(p=>p.id===id);return x?{id,n:x.n,p:x.p,q:cart[id]}:null}).filter(Boolean);
+ if(!user){$("err").textContent="Konekte ak Google anvan ou voye kòmand lan.";return null}
+ if(!items.length){$("err").textContent="Panyen ou vid.";return null}
+ if(!nm||!ph||!ad){$("err").textContent="Ranpli non, nimewo WhatsApp ak adrès ou.";return null}
+ $("err").textContent="";
+ const total=items.reduce((a,i)=>a+i.p*i.q,0);
+ const m="Bonjou Boutik Lakay! Mwen vle fè yon kòmand:\n"+items.map(i=>`- ${i.q} x ${i.n} = ${G(i.p*i.q)}`).join("\n")+`\n\nTotal: ${G(total)}\n\nNon: ${nm}\nWhatsApp: ${ph}\nAdrès: ${ad}`+(nt?"\nNòt livrezon: "+nt:"");
+ return {m,d:{uid:user.uid,email:user.email,name:nm,phone:ph,addr:ad,note:nt,items,total,status:"An atant",ts:serverTimestamp()}};
+}
+$("send").addEventListener("click",e=>{
+ const o=orderData();if(!o){e.preventDefault();return}
+ $("send").href="https://wa.me/"+SHOP_WA+"?text="+encodeURIComponent(o.m);
+ if(o.m!==lastO){lastO=o.m;addDoc(collection(db,"orders"),o.d).then(()=>{cart={};saveCart();cartUI()}).catch(()=>{$("err").textContent="Kòmand lan pa sove nan sistèm nan, men mesaj WhatsApp la ale."})}
+});
+function loanData(){
+ const v=i=>$(i).value.trim(),n=v("ln"),p=v("lp"),a=v("la"),m=+v("lm"),r=v("lr");
+ if(!user){$("lerr").textContent="Konekte ak Google anvan ou voye demann lan.";return null}
+ if(!n||!p||!a||!r||!(m>0)){$("lerr").textContent="Ranpli tout chan yo (montan an dwe yon nimewo).";return null}
+ $("lerr").textContent="";
+ const g=$("lg").value,d=$("ld").value;
+ const t=`Bonjou Boutik Lakay! Mwen vle fè yon demann prè:\nNon: ${n}\nTelefòn: ${p}\nKote mwen rete: ${a}\nMontan: ${G(m)}\nRezon: ${r}\nGaranti: ${g}\nRanbousman: ${d} mwa`;
+ return {t,d:{uid:user.uid,email:user.email,name:n,phone:p,addr:a,amount:m,reason:r,guarantee:g,months:+d,status:"An atant",ts:serverTimestamp()}};
+}
+$("lsend").addEventListener("click",e=>{
+ const o=loanData();if(!o){e.preventDefault();return}
+ $("lsend").href="https://wa.me/"+SHOP_WA+"?text="+encodeURIComponent(o.t);
+ if(o.t!==lastL){lastL=o.t;addDoc(collection(db,"loans"),o.d).catch(()=>{$("lerr").textContent="Demann lan pa sove nan sistèm nan, men mesaj WhatsApp la ale."})}
+});
+
+function admRender(){
+ const el=$("adm");if(!isAdmin()){el.innerHTML="";return}
+ const T=[["p","Pwodwi"],["s","Sèvis"],["o","Kòmand"],["l","Prè"]];
+ let h='<div class="svc"><h2>Admin 🔐</h2><div class="tabs">'+T.map(x=>`<button class="chip" data-as="${x[0]}" aria-pressed="${sec===x[0]}">${x[1]}</button>`).join("")+"</div>";
+ const del=k=>`<button class="chip" data-ad2="${k}" style="color:var(--hot)">${arm===k?"Konfime?":"Efase"}</button>`;
+ if(sec==="p"||sec==="s"){
+  const A=sec==="p"?P:S;
+  h+=A.map((x,i)=>{const k=sec+":"+i;return `<div class="row">${x.img?`<img src="${x.img}" alt="">`:""}<div class="t">${esc(x.n)}<small>${esc(x.c)}${sec==="p"?" · "+G(x.p):""}</small></div><button class="chip" data-ae="${k}">Modifye</button>${del(k)}</div>`}).join("")||'<p class="empty">Anyen ankò. Ajoute premye a anba a.</p>';
+  h+=`<div class="f"><b>${ed!==null?"Modifye":"Ajoute"}</b><div><label for="fn">Non</label><input id="fn"></div><div><label for="fc">Kategori</label><input id="fc"></div><div><label for="fi">Foto (opsyonèl)</label><input id="fi" type="file" accept="image/*"><img id="pv" alt="" style="display:none;width:96px;height:96px;object-fit:cover;border-radius:10px;margin-top:6px"></div>`+(sec==="p"?'<div><label for="fp">Pri (G)</label><input id="fp" type="number" inputmode="numeric"></div>':'<div><label for="fd">Deskripsyon</label><textarea id="fd" rows="2"></textarea></div>')+`</div><p class="err" id="ae"></p><button class="send" style="border:0" data-ad="save">Sove</button>`+(ed!==null?'<button class="close" data-ad="cancel">Anile modifikasyon</button>':"");
+ }else{
+  const Q=sec==="o"?O:L,ST=sec==="o"?OST:LST;
+  h+=Q.map((x,i)=>{const k=sec+":"+i;
+   const info=sec==="o"?(x.items||[]).map(t=>t.q+" x "+t.n).join(", ")+" · Total: "+G(x.total||0)+" · "+x.addr+(x.note?" · "+x.note:""):`${G(x.amount||0)} · ${x.reason} · Garanti: ${x.guarantee} · ${x.months} mwa · ${x.addr}`;
+   return `<div class="row" style="flex-direction:column;align-items:stretch"><div><b>${esc(x.name)}</b> · ${esc(x.phone)}</div><small style="color:var(--mute)">${esc(dt(x))} · ${esc(info)}</small><div style="display:flex;gap:8px;margin-top:6px"><select class="sel" data-st="${k}">${ST.map(s=>`<option${s===x.status?" selected":""}>${s}</option>`).join("")}</select>${del(k)}</div></div>`}).join("")||`<p class="empty">Pa gen ${sec==="o"?"kòmand":"demann"} ankò.</p>`;
+ }
+ el.innerHTML=h+"</div>";
+ if(ed!==null&&(sec==="p"||sec==="s")){const x=(sec==="p"?P:S)[ed];if(x){$("fn").value=x.n;$("fc").value=x.c;if(sec==="p")$("fp").value=x.p;else $("fd").value=x.d||""}}
+ if((sec==="p"||sec==="s")&&cur){$("pv").src=cur;$("pv").style.display="block"}
+}
+async function admSave(){
+ const n=$("fn").value.trim(),c=$("fc").value.trim(),col=sec==="p"?"products":"services";let o;
+ if(!n||!c){$("ae").textContent="Ranpli non ak kategori.";return}
+ if(sec==="p"){const p=+$("fp").value;if(!(p>0)){$("ae").textContent="Mete yon pri ki bon.";return}o={n,c,p,img:cur}}
+ else{const d=$("fd").value.trim();if(!d){$("ae").textContent="Mete yon deskripsyon.";return}o={n,c,d,img:cur}}
+ const ref=ed!==null?doc(db,col,(sec==="p"?P:S)[ed].id):doc(collection(db,col));
+ if(ed===null)o.ts=serverTimestamp();
+ try{await setDoc(ref,o,{merge:true});ed=null;cur="";admRender()}catch(e){$("ae").textContent="Pa ka sove: "+e.code}
+}
+function pickImg(inp){
+ const f=inp.files&&inp.files[0];if(!f)return;
+ const r=new FileReader();
+ r.onload=()=>{const im=new Image();
+  im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement("canvas");
+   c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+   c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+   cur=c.toDataURL("image/jpeg",0.72);$("pv").src=cur;$("pv").style.display="block"};
+  im.onerror=()=>{$("ae").textContent="Foto sa a pa ka louvri."};
+  im.src=r.result};
+ r.readAsDataURL(f);
+}
+async function admClick(d){
+ if(d.ad==="save")return admSave();
+ if(d.ad==="cancel"){ed=null;cur="";return admRender()}
+ if(d.as){sec=d.as;ed=null;arm="";cur="";return admRender()}
+ if(d.ae){ed=+d.ae.split(":")[1];cur=(sec==="p"?P:S)[ed].img||"";return admRender()}
+ if(d.ad2){
+  if(arm!==d.ad2){arm=d.ad2;return admRender()}
+  const a=d.ad2.split(":"),i=+a[1],K={p:"products",s:"services",o:"orders",l:"loans"}[a[0]],Z={p:P,s:S,o:O,l:L}[a[0]];
+  arm="";ed=null;
+  try{await deleteDoc(doc(db,K,Z[i].id))}catch(e){msg("Pa ka efase: "+e.code)}
+  admRender();
+ }
+}
+
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;
+ const d=b.dataset;
+ if(b.id==="in")login();
+ else if(b.id==="out")signOut(auth);
+ else if(d.c){cat=d.c;chips();grid()}
+ else if(d.a){cart[d.a]=(cart[d.a]||0)+1;saveCart();cartUI()}
+ else if(d.p){cart[d.p]++;saveCart();cartUI()}
+ else if(d.m){if(--cart[d.m]<=0)delete cart[d.m];saveCart();cartUI()}
+ else if(d.r){if(!user)return;const a=d.r.split(":");setDoc(doc(db,"ratings",user.uid+"_"+a[0]),{uid:user.uid,pid:a[0],stars:+a[1]}).catch(()=>msg("Nòt la pa sove."))}
+ else if(d.t){tab=d.t;tabsUI();view();if(tab==="p")grid();window.scrollTo(0,0)}
+ else if(d.ad||d.as||d.ae||d.ad2)admClick(d)
+ else if(b.id==="fab")$("sheet").classList.add("open")
+ else if(b.id==="close")$("sheet").classList.remove("open")
+ else if(b.id==="clear"){cart={};saveCart();cartUI();$("err").textContent=""}
+});
+document.addEventListener("change",e=>{
+ if(e.target.id==="fi"){pickImg(e.target);return}
+ const s=e.target.dataset&&e.target.dataset.st;if(!s)return;
+ const a=s.split(":"),x=(a[0]==="o"?O:L)[+a[1]];
+ if(x)updateDoc(doc(db,a[0]==="o"?"orders":"loans",x.id),{status:e.target.value}).catch(()=>msg("Estati a pa chanje."));
+});
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))$("sheet").classList.remove("open")});
+$("q").addEventListener("input",grid);
+acct();tabsUI();view();chips();grid();svcs();cartUI();
+</script>
+</body>
+</html>
